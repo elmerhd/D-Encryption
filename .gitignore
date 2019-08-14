@@ -1,1 +1,3 @@
-.denc
+*.denc
+/dist/
+/encrypted/
