@@ -1,3 +1,4 @@
 *.denc
 /dist/
 /encrypted/
+/build/
