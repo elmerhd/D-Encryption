@@ -31,7 +31,6 @@ public class EncryptDialog extends javax.swing.JDialog {
         super(parent, modal);
         this.mainformParent = mainformParent;
         initComponents();
-        reset();
     }
 
     /**
@@ -91,6 +90,7 @@ public class EncryptDialog extends javax.swing.JDialog {
 
         lblInfo.setFont(new java.awt.Font("Courier New", 0, 18)); // NOI18N
         lblInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblInfo.setText("Please select a file . .");
 
         btnCancel.setFont(new java.awt.Font("Courier New", 0, 18)); // NOI18N
         btnCancel.setText("Close");
@@ -250,10 +250,7 @@ public class EncryptDialog extends javax.swing.JDialog {
             } finally {
                 if (encryptionProgress.getValue() == 100) {
                     JOptionPane.showMessageDialog(this, "Encryption is done.", "Successful", JOptionPane.INFORMATION_MESSAGE);
-                    lblInfo.setForeground(Color.green);
                     onDone();
-                    clearFields();
-                    reset();
                 }
             }
 
@@ -261,22 +258,7 @@ public class EncryptDialog extends javax.swing.JDialog {
         progressThread.start();
 
     }
-
-    private void clearFields() {
-        progressThread = null;
-        selectedFile = null;
-        tempFile = null;
-        txtFile.setText("");
-        txtPassword.setText("");
-        
-    }
-    private void reset() {
-        encryptionProgress.setValue(0);
-        encryptionProgress.setVisible(false);
-        txtPassword.setEnabled(false);
-        lblInfo.setText("Please select a file.");
-        btnEncrypt.setEnabled(false);
-    }
+    
     private void onDone(){
         try {
             CommonUtils.saveData(mainformParent.dataMap, new DencFile(selectedFile.getName(), String.valueOf(selectedFile.length()), password, tempFile.getName()));
@@ -284,6 +266,7 @@ public class EncryptDialog extends javax.swing.JDialog {
                 System.out.println(selectedFile.getAbsolutePath() + " is deleted.");
             }
             mainformParent.readData();
+            dispose();
         } catch (Exception e) {
             e.printStackTrace();
         }

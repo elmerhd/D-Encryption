@@ -5,30 +5,35 @@
  */
 package com.junk.application;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.security.auth.callback.ConfirmationCallback;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Elmer
  */
-public class DecryptedDialog extends javax.swing.JDialog {
-    private Thread progressThread = null;
+public class DecryptDialog extends javax.swing.JDialog {
+   private Thread progressThread = null;
+    private JFileChooser fileChooser = new JFileChooser();;
+    private File selectedFile = null;
+    private File tempFile = null;
+    private String password = null;
     private MainForm mainformParent;
     private String file2Decrypt;
-    private HashMap<String,DencFile> passwordMap = new HashMap<>();
     /**
      * Creates new form DecryptedDialog
      */
-    public DecryptedDialog(java.awt.Frame parent, MainForm mainformParent, boolean modal, HashMap<String,DencFile> passwordMap, String file2decrypt) {
+    public DecryptDialog(java.awt.Frame parent, MainForm mainformParent, boolean modal, String file2decrypt) {
         super(parent, modal);
         initComponents();
         this.mainformParent = mainformParent;
-        this.passwordMap = passwordMap;
         this.file2Decrypt = file2decrypt;
     }
 
@@ -136,18 +141,43 @@ public class DecryptedDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
-        if (passwordMap.get(file2Decrypt).getPassword().equals(txtPassword.getText())){
-            
+        if (mainformParent.dataMap.get(file2Decrypt).getPassword().equals(txtPassword.getText())){
+            onSelectFile();
         } else {
             JOptionPane.showMessageDialog(this, "Incorrect Password!","Decryption Failed",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDecryptActionPerformed
+    private void onSelectFile(){
+        fileChooser.setSelectedFile(new File(mainformParent.dataMap.get(file2Decrypt).getOriginalFileName()));
+        int opt = fileChooser.showSaveDialog(this);
+        tempFile = new File("encrypted/"+mainformParent.dataMap.get(file2Decrypt).getTempFileName());
+        selectedFile = fileChooser.getSelectedFile();
+        password = txtPassword.getText();
+        if (opt == 0) {
+            decrypt(password, tempFile, selectedFile);
+        }
+    }
+    private void decrypt(String key,File src,File dest){
+        progressThread = new Thread(() -> {
+            try {
+                DesUtils.decrypt(key, new FileInputStream(src), new FileOutputStream(dest), src, decryptionProgress);
+            } catch (Exception ex) {
+                Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }finally {
+                if (decryptionProgress.getValue() == 100) {
+                    JOptionPane.showMessageDialog(this, "Decryption is done.", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    onDone();
+                }
+            }
 
+        });
+        progressThread.start();
+    }
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         try {
             onCancel();
         } catch (IOException ex) {
-            Logger.getLogger(DecryptedDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -155,11 +185,20 @@ public class DecryptedDialog extends javax.swing.JDialog {
         try {
             onCancel();
         } catch (IOException ex) {
-            Logger.getLogger(DecryptedDialog.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowClosing
-    private void doDecryption() {
-        
+    private void onDone(){
+        try {
+            CommonUtils.removeData(mainformParent.dataMap, file2Decrypt);
+            if(tempFile.exists() && tempFile.delete()) {
+                System.out.println(tempFile.getAbsolutePath() + " is deleted.");
+            }
+            mainformParent.readData();
+            dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     /**
      * on cancel of the process , closes running thread and input streams and

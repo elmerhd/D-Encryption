@@ -179,8 +179,8 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
         int row = encryptedTable.getSelectedRow();
-        String encryptedFileName = encryptedTable.getValueAt(row, 2).toString();
-        DecryptedDialog dd = new DecryptedDialog(this, this, true, dataMap, encryptedFileName);
+        String encryptedFileName = encryptedTable.getValueAt(row, 3).toString();
+        DecryptDialog dd = new DecryptDialog(this, this, true, encryptedFileName);
         dd.setLocationRelativeTo(this);
         dd.setVisible(true);
     }//GEN-LAST:event_btnDecryptActionPerformed

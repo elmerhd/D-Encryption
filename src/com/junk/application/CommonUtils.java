@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.junk.application;
 
 import java.io.BufferedWriter;
@@ -22,11 +17,25 @@ public class CommonUtils {
     public static String IV = "dencrypttpyrcned";
     public static String KEY = "dencrypttpyrcned";
     public static File dbFile = new File("db.dat");
+    public static File encryptedFolder = new File(System.getProperty("user.dir")+"/encrypted/db.dat");
+    /**
+     * Create DB file
+     * @throws IOException 
+     */
     public static void createDBFile() throws IOException {
         if (!dbFile.exists()) {
             new PrintWriter(new BufferedWriter(new FileWriter(dbFile)));
         }
     }
+    public static void createEncryptedFolder(){
+        encryptedFolder.getParentFile().mkdirs();
+    }
+    /**
+     * Map the String 
+     * @param data the map of data collected
+     * @param newEncryptedFiles list of {@link com.junk.application.DencFile}
+     * @throws Exception 
+     */
     public static void saveData(HashMap<String,DencFile> data ,DencFile... newEncryptedFiles) throws Exception{
         for (DencFile dencFile : newEncryptedFiles) {
             data.put(dencFile.getTempFileName(), dencFile);
@@ -37,6 +46,21 @@ public class CommonUtils {
         writer.print(encryptedText);
         writer.close();
     }
+    
+    public static void removeData(HashMap<String,DencFile> data, String key) throws Exception{
+        data.remove(key);
+        String text = mapToString(data);
+        String encryptedText = AESEncryption.encrypt(text, IV, KEY);
+        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(dbFile)));
+        writer.print(encryptedText);
+        writer.close();
+    }
+    
+    /**
+     * 
+     * @param map map the collected data to String
+     * @return the string mapped from collected map
+     */
     public static String mapToString(HashMap<String,DencFile> map) {
         String map2String = "";
         int counter = 0;
@@ -50,14 +74,17 @@ public class CommonUtils {
         }
         return map2String;
     }
-    
+    /**
+     * Read Data from db.dat
+     * @return map of encrypted files
+     * @throws Exception 
+     */
     public static HashMap<String,DencFile> readData() throws Exception{
         HashMap<String,DencFile> data = new HashMap<>();
         String decryptedData = AESEncryption.decrypt(new String(Files.readAllBytes(Paths.get(dbFile.getCanonicalPath()))), IV, KEY);
         if (!decryptedData.equals("")) {
             String [] row = decryptedData.split("\n");
             for (String string : row) {
-                System.out.println(string);
                 String [] dataArr = string.split(":");
                 String originalFileName = dataArr[0];
                 String fileSize = dataArr[1];
@@ -69,6 +96,11 @@ public class CommonUtils {
         }
         return data;
     }
+    /**
+     * Get Detailed File size
+     * @param fileSize the size in bytes
+     * @return the file size in Megabytes
+     */
     public static double getFileSize(long fileSize) {
         double kb = (fileSize / 1024);
         double mb = (kb / 1024);
