@@ -2,4 +2,4 @@
 /dist/
 /encrypted/
 /build/
-db.dat
+*.dat
