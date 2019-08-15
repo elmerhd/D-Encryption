@@ -38,8 +38,7 @@ public class MainForm extends javax.swing.JFrame {
                 String originalFileName = file.getOriginalFileName();
                 String fileSize = df.format(CommonUtils.getFileSize(Long.parseLong(file.getFileSize())))  + " Mb";
                 String encryptedFileName = file.getTempFileName();
-                String password = file.getPassword();
-                model.addRow(new String [] { originalFileName, fileSize, password, encryptedFileName });
+                model.addRow(new String [] { originalFileName, fileSize, encryptedFileName });
             }
             encryptedTable.setModel(model);
         } catch (Exception ex) {
@@ -56,10 +55,10 @@ public class MainForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        mainPanel = new javax.swing.JPanel();
         btnEncrypt = new javax.swing.JButton();
         btnDecrypt = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        encryptionScrollPane = new javax.swing.JScrollPane();
         encryptedTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -71,7 +70,10 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btnEncrypt.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
-        btnEncrypt.setText("New Encryption");
+        btnEncrypt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/encrypt-normal.png"))); // NOI18N
+        btnEncrypt.setText("Encrypt");
+        btnEncrypt.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/encrypt-press.png"))); // NOI18N
+        btnEncrypt.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/encrypt-hover.png"))); // NOI18N
         btnEncrypt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEncryptActionPerformed(evt);
@@ -79,8 +81,11 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btnDecrypt.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
-        btnDecrypt.setText("Decryption");
+        btnDecrypt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/decrypt-normal.png"))); // NOI18N
+        btnDecrypt.setText("Decrypt");
         btnDecrypt.setEnabled(false);
+        btnDecrypt.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/decrypt-press.png"))); // NOI18N
+        btnDecrypt.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/decrypt-hover.png"))); // NOI18N
         btnDecrypt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDecryptActionPerformed(evt);
@@ -93,14 +98,14 @@ public class MainForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "<html><font face=\"Courier New\" color=\"green\" size=\"6\">File Name</font></html>", "<html><font face=\"Courier New\" color=\"green\" size=\"6\">File Size</font></html>", "<html><font face=\"Courier New\" color=\"green\" size=\"6\">Password</font></html>", "<html><font face=\"Courier New\" color=\"green\" size=\"6\">Encrypted File</font></html>"
+                "<html><font face=\"Courier New\" color=\"green\" size=\"6\">File Name</font></html>", "<html><font face=\"Courier New\" color=\"green\" size=\"6\">File Size</font></html>", "<html><font face=\"Courier New\" color=\"green\" size=\"6\">Encrypted File</font></html>"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -117,32 +122,35 @@ public class MainForm extends javax.swing.JFrame {
                 encryptedTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(encryptedTable);
+        encryptionScrollPane.setViewportView(encryptedTable);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1020, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(encryptionScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1020, Short.MAX_VALUE)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(btnEncrypt, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDecrypt, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+
+        mainPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDecrypt, btnEncrypt});
+
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEncrypt)
                     .addComponent(btnDecrypt))
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                .addComponent(encryptionScrollPane)
                 .addGap(10, 10, 10))
         );
 
@@ -150,11 +158,11 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -179,17 +187,17 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
         int row = encryptedTable.getSelectedRow();
-        String encryptedFileName = encryptedTable.getValueAt(row, 3).toString();
+        String encryptedFileName = encryptedTable.getValueAt(row, 2).toString();
         DecryptDialog dd = new DecryptDialog(this, this, true, encryptedFileName);
         dd.setLocationRelativeTo(this);
         dd.setVisible(true);
     }//GEN-LAST:event_btnDecryptActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDecrypt;
+    public javax.swing.JButton btnDecrypt;
     private javax.swing.JButton btnEncrypt;
     private javax.swing.JTable encryptedTable;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane encryptionScrollPane;
+    private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
 }
