@@ -46,6 +46,16 @@ public class CommonUtils {
         writer.print(encryptedText);
         writer.close();
     }
+    public static void updateData(HashMap<String,DencFile> data, String key, DencFile... newUpdatedFile)throws Exception{
+        for (DencFile dencFile : newUpdatedFile) {
+            data.put(key, dencFile);
+        }
+        String text = mapToString(data);
+        String encryptedText = AESEncryption.encrypt(text, IV, KEY);
+        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(dbFile)));
+        writer.print(encryptedText);
+        writer.close();
+    }
     
     public static void removeData(HashMap<String,DencFile> data, String key) throws Exception{
         data.remove(key);

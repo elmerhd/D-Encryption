@@ -31,6 +31,7 @@ public class EncryptDialog extends javax.swing.JDialog {
         super(parent, modal);
         this.mainformParent = mainformParent;
         initComponents();
+        encryptionProgress.setVisible(false);
     }
 
     /**
@@ -244,6 +245,7 @@ public class EncryptDialog extends javax.swing.JDialog {
 
         progressThread = new Thread(() -> {
             try {
+                encryptionProgress.setVisible(true);
                 DesUtils.encrypt(key, new FileInputStream(src), new FileOutputStream(dest), src, encryptionProgress);
             } catch (Exception ex) {
                 Logger.getLogger(EncryptDialog.class.getName()).log(Level.SEVERE, null, ex);

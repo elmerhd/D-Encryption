@@ -5,6 +5,7 @@
  */
 package com.junk.application;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,6 +36,7 @@ public class DecryptDialog extends javax.swing.JDialog {
         initComponents();
         this.mainformParent = mainformParent;
         this.file2Decrypt = file2decrypt;
+        decryptionProgress.setVisible(false);
     }
 
     /**
@@ -49,7 +51,7 @@ public class DecryptDialog extends javax.swing.JDialog {
         mainPanel = new javax.swing.JPanel();
         decryptionProgress = new javax.swing.JProgressBar();
         txtPassword = new javax.swing.JPasswordField();
-        jLabel1 = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
         btnCancel = new javax.swing.JButton();
         btnDecrypt = new javax.swing.JButton();
 
@@ -67,9 +69,9 @@ public class DecryptDialog extends javax.swing.JDialog {
 
         txtPassword.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel1.setText("Password : ");
+        lblPassword.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
+        lblPassword.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPassword.setText("Password : ");
 
         btnCancel.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
         btnCancel.setText("Close");
@@ -102,7 +104,7 @@ public class DecryptDialog extends javax.swing.JDialog {
                         .addGap(14, 14, 14)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                                .addComponent(lblPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(decryptionProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -114,13 +116,13 @@ public class DecryptDialog extends javax.swing.JDialog {
                 .addGap(48, 48, 48)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtPassword)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancel)
                     .addComponent(btnDecrypt))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(decryptionProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(decryptionProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -150,7 +152,7 @@ public class DecryptDialog extends javax.swing.JDialog {
     private void onSelectFile(){
         fileChooser.setSelectedFile(new File(mainformParent.dataMap.get(file2Decrypt).getOriginalFileName()));
         int opt = fileChooser.showSaveDialog(this);
-        tempFile = new File("encrypted/"+mainformParent.dataMap.get(file2Decrypt).getTempFileName());
+        tempFile = new File("encrypted/" + mainformParent.dataMap.get(file2Decrypt).getTempFileName());
         selectedFile = fileChooser.getSelectedFile();
         password = txtPassword.getText();
         if (opt == 0) {
@@ -160,6 +162,7 @@ public class DecryptDialog extends javax.swing.JDialog {
     private void decrypt(String key,File src,File dest){
         progressThread = new Thread(() -> {
             try {
+                decryptionProgress.setVisible(true);
                 DesUtils.decrypt(key, new FileInputStream(src), new FileOutputStream(dest), src, decryptionProgress);
             } catch (Exception ex) {
                 Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
@@ -180,7 +183,7 @@ public class DecryptDialog extends javax.swing.JDialog {
             Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
-
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
             onCancel();
@@ -194,7 +197,12 @@ public class DecryptDialog extends javax.swing.JDialog {
             if(tempFile.exists() && tempFile.delete()) {
                 System.out.println(tempFile.getAbsolutePath() + " is deleted.");
             }
+            mainformParent.btnDecrypt.setEnabled(false);
             mainformParent.readData();
+            int opt = JOptionPane.showConfirmDialog(this, "Open file", "Confirmation", JOptionPane.YES_NO_OPTION);
+            if (opt == ConfirmationCallback.YES) {
+                Desktop.getDesktop().open(selectedFile);
+            }
             dispose();
         } catch (Exception e) {
             e.printStackTrace();
@@ -209,7 +217,7 @@ public class DecryptDialog extends javax.swing.JDialog {
     private void onCancel() throws IOException {
         if (progressThread != null) {
             progressThread.suspend();
-            int option = JOptionPane.showConfirmDialog(this, "Encryption is in progress, Are you sure to cancel?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int option = JOptionPane.showConfirmDialog(this, "Decryption is in progress, Are you sure to cancel?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (option == ConfirmationCallback.YES) {
                 dispose();
                 progressThread.stop();
@@ -227,7 +235,7 @@ public class DecryptDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDecrypt;
     private javax.swing.JProgressBar decryptionProgress;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblPassword;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JPasswordField txtPassword;
     // End of variables declaration//GEN-END:variables

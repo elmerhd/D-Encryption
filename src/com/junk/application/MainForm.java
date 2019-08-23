@@ -38,6 +38,7 @@ public class MainForm extends javax.swing.JFrame {
                 String originalFileName = file.getOriginalFileName();
                 String fileSize = df.format(CommonUtils.getFileSize(Long.parseLong(file.getFileSize())))  + " Mb";
                 String encryptedFileName = file.getTempFileName();
+                System.out.println(file.getPassword());
                 model.addRow(new String [] { originalFileName, fileSize, encryptedFileName });
             }
             encryptedTable.setModel(model);
@@ -60,6 +61,7 @@ public class MainForm extends javax.swing.JFrame {
         btnDecrypt = new javax.swing.JButton();
         encryptionScrollPane = new javax.swing.JScrollPane();
         encryptedTable = new javax.swing.JTable();
+        btnEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("DEncryption");
@@ -124,6 +126,15 @@ public class MainForm extends javax.swing.JFrame {
         });
         encryptionScrollPane.setViewportView(encryptedTable);
 
+        btnEdit.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
+        btnEdit.setText("Edit");
+        btnEdit.setEnabled(false);
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -136,11 +147,13 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(btnEncrypt, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDecrypt, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        mainPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDecrypt, btnEncrypt});
+        mainPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnDecrypt, btnEdit, btnEncrypt});
 
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,11 +161,14 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEncrypt)
-                    .addComponent(btnDecrypt))
+                    .addComponent(btnDecrypt)
+                    .addComponent(btnEdit))
                 .addGap(10, 10, 10)
                 .addComponent(encryptionScrollPane)
                 .addGap(10, 10, 10))
         );
+
+        mainPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnDecrypt, btnEdit});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -183,6 +199,7 @@ public class MainForm extends javax.swing.JFrame {
 
     private void encryptedTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encryptedTableMouseClicked
         btnDecrypt.setEnabled(true);
+        btnEdit.setEnabled(true);
     }//GEN-LAST:event_encryptedTableMouseClicked
 
     private void btnDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecryptActionPerformed
@@ -193,8 +210,17 @@ public class MainForm extends javax.swing.JFrame {
         dd.setVisible(true);
     }//GEN-LAST:event_btnDecryptActionPerformed
 
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        int row = encryptedTable.getSelectedRow();
+        String encryptedFileName = encryptedTable.getValueAt(row, 2).toString();
+        EditDialog ed = new EditDialog(this, this, true, encryptedFileName);
+        ed.setLocationRelativeTo(this);
+        ed.setVisible(true);
+    }//GEN-LAST:event_btnEditActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnDecrypt;
+    public javax.swing.JButton btnEdit;
     private javax.swing.JButton btnEncrypt;
     private javax.swing.JTable encryptedTable;
     private javax.swing.JScrollPane encryptionScrollPane;
