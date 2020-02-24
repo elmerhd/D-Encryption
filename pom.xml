@@ -10,6 +10,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.weblookandfeel</groupId>
+            <artifactId>weblaf-ui</artifactId>
+            <version>1.2.12</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
