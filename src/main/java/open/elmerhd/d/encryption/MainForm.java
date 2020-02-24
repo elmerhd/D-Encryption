@@ -33,7 +33,6 @@ public class MainForm extends javax.swing.JFrame {
                 String originalFileName = file.getOriginalFileName();
                 String fileSize = df.format(CommonUtils.getFileSize(Long.parseLong(file.getFileSize())))  + " Mb";
                 String encryptedFileName = file.getTempFileName();
-                System.out.println(file.getPassword());
                 model.addRow(new String [] { originalFileName, fileSize, encryptedFileName });
             }
             encryptedTable.setModel(model);
