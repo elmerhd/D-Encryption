@@ -1,24 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.junk.application;
+package open.elmerhd.d.encryption;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.security.auth.callback.ConfirmationCallback;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author Elmer
+ * @author elmerhd
  */
 public class EditDialog extends javax.swing.JDialog {
     
@@ -142,7 +130,7 @@ public class EditDialog extends javax.swing.JDialog {
                 mainformParent.readData();
                 dispose();
             } catch (Exception ex) {
-                Logger.getLogger(EditDialog.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(this, "File Name is Empty", "Error", JOptionPane.ERROR_MESSAGE);

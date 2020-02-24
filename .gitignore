@@ -3,3 +3,4 @@
 /encrypted/
 /build/
 *.dat
+/target/

@@ -1,4 +1,4 @@
-package com.junk.application;
+package open.elmerhd.d.encryption;
 
 import java.awt.Color;
 import java.io.File;
@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Elmer
+ * @author elmerhd
  */
 public class EncryptDialog extends javax.swing.JDialog {
 
@@ -217,7 +217,7 @@ public class EncryptDialog extends javax.swing.JDialog {
         try {
             onCancel();
         } catch (IOException ex) {
-            Logger.getLogger(EncryptDialog.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
 
@@ -229,7 +229,7 @@ public class EncryptDialog extends javax.swing.JDialog {
         try {
             encrypt(password, selectedFile, this.tempFile);
         } catch (Exception ex) {
-            Logger.getLogger(EncryptDialog.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEncryptActionPerformed
 
@@ -237,7 +237,7 @@ public class EncryptDialog extends javax.swing.JDialog {
         try {
             onCancel();
         } catch (IOException ex) {
-            Logger.getLogger(EncryptDialog.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_formWindowClosing
     
@@ -269,8 +269,8 @@ public class EncryptDialog extends javax.swing.JDialog {
             }
             mainformParent.readData();
             dispose();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     

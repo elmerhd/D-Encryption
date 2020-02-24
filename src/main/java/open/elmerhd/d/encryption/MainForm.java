@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.junk.application;
+package open.elmerhd.d.encryption;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -15,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Elmer
+ * @author elmerhd
  */
 public class MainForm extends javax.swing.JFrame {
     private DecimalFormat df = new DecimalFormat("#,##0.00");
@@ -43,7 +38,7 @@ public class MainForm extends javax.swing.JFrame {
             }
             encryptedTable.setModel(model);
         } catch (Exception ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -72,10 +67,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btnEncrypt.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
-        btnEncrypt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/encrypt-normal.png"))); // NOI18N
         btnEncrypt.setText("Encrypt");
-        btnEncrypt.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/encrypt-press.png"))); // NOI18N
-        btnEncrypt.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/encrypt-hover.png"))); // NOI18N
         btnEncrypt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEncryptActionPerformed(evt);
@@ -83,11 +75,8 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btnDecrypt.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
-        btnDecrypt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/decrypt-normal.png"))); // NOI18N
         btnDecrypt.setText("Decrypt");
         btnDecrypt.setEnabled(false);
-        btnDecrypt.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/decrypt-press.png"))); // NOI18N
-        btnDecrypt.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/junk/application/icons/decrypt-hover.png"))); // NOI18N
         btnDecrypt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDecryptActionPerformed(evt);

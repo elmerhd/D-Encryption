@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.junk.application;
+package open.elmerhd.d.encryption;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -18,7 +13,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Elmer
+ * @author elmerhd
  */
 public class DecryptDialog extends javax.swing.JDialog {
    private Thread progressThread = null;
@@ -165,7 +160,7 @@ public class DecryptDialog extends javax.swing.JDialog {
                 decryptionProgress.setVisible(true);
                 DesUtils.decrypt(key, new FileInputStream(src), new FileOutputStream(dest), src, decryptionProgress);
             } catch (Exception ex) {
-                Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }finally {
                 if (decryptionProgress.getValue() == 100) {
                     JOptionPane.showMessageDialog(this, "Decryption is done.", "Successful", JOptionPane.INFORMATION_MESSAGE);
@@ -180,7 +175,7 @@ public class DecryptDialog extends javax.swing.JDialog {
         try {
             onCancel();
         } catch (IOException ex) {
-            Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCancelActionPerformed
     
@@ -188,7 +183,7 @@ public class DecryptDialog extends javax.swing.JDialog {
         try {
             onCancel();
         } catch (IOException ex) {
-            Logger.getLogger(DecryptDialog.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_formWindowClosing
     private void onDone(){
