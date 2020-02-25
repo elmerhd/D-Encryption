@@ -22,6 +22,8 @@ jobs:
           release_name: Release ${{ github.ref }}
           body: |
             Changes in this Release
-            - change url path
+            - add web laf
+            - remove edit
+            - change release config to single jar-with-dependencies
           draft: false
           prerelease: false
